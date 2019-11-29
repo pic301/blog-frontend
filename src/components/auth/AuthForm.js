@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Button from '../common/Button'
 import palette from '../../lib/styles/palette';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 /**
  * 회원가입 또는 로그인 폼
@@ -43,11 +43,16 @@ const Footer = styled.div`
 const ButtonWithMarginTop = styled(Button)`
     margin-top:1rem;
 `;
+const textMap = {
+    login: '로그인',
+    register:'회원가입'
+}
 
-const AuthForm = () => {
+const AuthForm = ({type}) => {
+    const text = textMap[type]
     return (
         <AuthFormBlock>
-            <h3>로그인</h3>
+            <h3>{text}</h3>
             <form>
             <StyledInput autoComplete="username" name="username" placeholder="아이디"/>
             <StyledInput 
@@ -56,10 +61,23 @@ const AuthForm = () => {
                 placeholder="비밀번호"
                 type="password"
             />
-            <Button cyan fullWidth>로그인</Button>
+            {type === 'register' && (
+              <StyledInput 
+                autoComplete="new-password"
+                name="passwordConfirm"
+                placeholder="비밀번호 확인"
+                type="password"
+            />
+            )}
+            <ButtonWithMarginTop cyan fullWidth>
+                {text}
+            </ButtonWithMarginTop>
             </form>
             <Footer>
-                <Link to="/register">회원가입</Link>
+                {type === 'register' ?<Link to="/register">{text}</Link> :
+            <Link to="/login">{text}</Link>
+            }
+               
             </Footer>
         </AuthFormBlock>
     );

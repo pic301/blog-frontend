@@ -6,7 +6,7 @@ const RegisterPage = () => {
     return (
         <div>
              <AuthTemplate>
-                <AuthForm/>
+                <AuthForm type="register"/>
             </AuthTemplate>
         </div>
     );
