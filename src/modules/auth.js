@@ -1,20 +1,19 @@
-import {createAction , handleActions} from 'redux-actions';
+import { createAction , handleActions } from 'redux-actions';
 import produce from 'immer';
-import {takeLatest} from 'redux-saga/effects'
-import createRequestSaga from '../lib/createRequestSaga';
-import * as authAPI from '../lib/api/auth';
-
-const CHANGE_FIELD = 'auth/CHANGE_FIELD';
-const INITIALIZE_FORM = 'auth/INITIALIZE_FORM';
-
-const REGISTER = 'auth/REGISTER';
-const REGISTER_SUCCESS = 'auth/REGISTER_SUCCESS';
-const REGISTER_FAILURE = 'auth/REGISTER_FAILURE';
-
-const LOGIN = 'auth/LOGIN';
-const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS';
-const LOGIN_FAILURE = 'auth/LOGIN_FAILURE';
-
+import { takeLatest } from 'redux-saga/effects'
+import createRequestSaga, { createRequestActionTypes } from '../lib/createRequestSaga';
+  import * as authAPI from '../lib/api/auth';
+  
+  const CHANGE_FIELD = 'auth/CHANGE_FIELD';
+  const INITIALIZE_FORM = 'auth/INITIALIZE_FORM';
+  
+  const [REGISTER, REGISTER_SUCCESS, REGISTER_FAILURE] = createRequestActionTypes(
+    'auth/REGISTER'
+  );
+  
+  const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] = createRequestActionTypes(
+    'auth/LOGIN'
+  );
 export const changeField = createAction(CHANGE_FIELD,({form, key, value}) => ({
     form, key, value}) )
 export const initializeForm = createAction(INITIALIZE_FORM,form => form)
@@ -58,28 +57,33 @@ const auth = handleActions(
             ...state,
             [form]:initialState[form]
             
-        }),  
-        [LOGIN_SUCCESS]: (state, {payload: auth}) => ({
-            ...state,
-            authError:null,
-            auth
-        }),
-        [LOGIN_FAILURE]: (state, {payload:error}) => ({
-            ...state,
-            authError:error
-        }),
-        [REGISTER_SUCCESS]: (state, {payload:auth}) => ({
+        }), 
+         //회원가입 성공
+         [REGISTER_SUCCESS]: (state, {payload:auth}) => ({
             ...state,
             authError:null,
             auth 
         }),   
         
+        //회원가입 실패
         [REGISTER_FAILURE]: (state, {payload:error}) => ({
             ...state,
             authError:error    
-        }),    
+        }),     
+        //로그인 성공
+        [LOGIN_SUCCESS]: (state, {payload: auth}) => ({
+            ...state,
+            authError:null,
+            auth
+        }),
+        // 로그인 실패 
+        [LOGIN_FAILURE]: (state, {payload:error}) => ({
+            ...state,
+            authError:error
+        }),
+       
         
     },
     initialState,
-)
+);
 export default auth;
